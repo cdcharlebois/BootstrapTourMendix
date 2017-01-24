@@ -5,11 +5,34 @@
 
     <icon />
 
+
     <properties>
-        <property key="dummyKey" type="string" required="false" defaultValue="">
-            <caption>Dummy key</caption>
-            <category>Appearance</category>
-            <description>This key was added to make the widget work in the Modeler (needs atleast 1 key). Please change/remove this one</description>
+        <property key="steps" type="object" required="false" isList="true">
+            <caption>Intro steps</caption>
+            <category>Walkthrough</category>
+            <description>Each item in this list will render as a 'step' in the walkthrough.</description>
+            <properties>
+                <property key="selector" type="string" required="false">
+                    <caption>Selector</caption>
+                    <category>Main</category>
+                    <description>Selector for the element. (If empty, the walkthrough step will appear in the middle of the screen)</description>
+                </property>
+                <property key="isMendixName" type="boolean" required="true" defaultValue="true">
+                    <caption>Selector is Name</caption>
+                    <category>Main</category>
+                    <description>Choose 'Yes' is you're using the Mendix component name as the selector</description>
+                </property>
+                <property key="intro" type="string" required="false">
+                    <caption>Text</caption>
+                    <category>Main</category>
+                    <description>The text that will show up in the walkthrough step. HTML tags are welcome.</description>
+                </property>
+                <property key="position" type="string" required="false">
+                    <caption>Position</caption>
+                    <category>Main</category>
+                    <description>The position (relative to `Element`) for the walkthrough step to appear. Acceptable values are: top | right | bottom | left. Defaults to "bottom"</description>
+                </property>
+            </properties>
         </property>
     </properties>
 </widget>
