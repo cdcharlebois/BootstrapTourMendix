@@ -14,9 +14,10 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
+    "Intro/widget/lib/intro"
 
 
-], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent) {
+], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, Intro) {
     "use strict";
 
     return declare("Intro.widget.Intro", [ _WidgetBase ], {
@@ -28,6 +29,9 @@ define([
 
         constructor: function () {
             this._handles = [];
+            // console.log(Intro());
+            // this._appendCSS();
+            this._startIntro();
         },
 
         postCreate: function () {
@@ -47,6 +51,22 @@ define([
 
         uninitialize: function () {
           logger.debug(this.id + ".uninitialize");
+        },
+
+        _startIntro: function() {
+          var intro = Intro();
+          intro.setOptions({
+            steps:[
+              {
+                intro: "Hello World"
+              },
+              {
+                element: document.querySelector('.mx-name-staticImageViewer'),
+                intro: "This is a second piece"
+              }
+            ]
+          });
+          intro.start();
         },
 
         _updateRendering: function (callback) {
