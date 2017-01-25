@@ -14,14 +14,18 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
-    "Intro/widget/lib/intro"
+    "Intro/widget/lib/intro",
+    "dijit/_TemplatedMixin",
+    "dojo/text!Intro/widget/template/Intro.html"
 
 
-], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, Intro) {
+], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, Intro, _TemplatedMixin, template) {
     "use strict";
 
-    return declare("Intro.widget.Intro", [_WidgetBase], {
+    return declare("Intro.widget.Intro", [_WidgetBase, _TemplatedMixin], {
 
+        templateString: template,
+        buttonNode: null,
 
         // Internal variables.
         _handles: null,
@@ -30,27 +34,22 @@ define([
 
         // modeler
         steps: null,
+        buttonText: "",
+        errorMessage: "",
 
         constructor: function() {
             this._handles = [];
-            // console.log(Intro());
-            // this._appendCSS();
-            // this._setupIntro();
-            // this._startIntro();
-            // console.log(this.introsteps);
-
         },
 
         postCreate: function() {
             logger.debug(this.id + ".postCreate");
-            // console.log(this.introsteps)
-            // this._startIntro();
         },
 
         update: function(obj, callback) {
             logger.debug(this.id + ".update");
 
             this._contextObj = obj;
+            this._setupListeners();
             this._updateRendering(callback);
         },
 
@@ -62,9 +61,19 @@ define([
             logger.debug(this.id + ".uninitialize");
         },
 
+        _setupListeners: function() {
+          this.buttonNode.addEventListener('click', lang.hitch(this, this._doClick));
+        },
+
+        _doClick: function() {
+          this._waitForStepElements(this.steps);
+        },
+
         _waitForStepElements: function(elements) {
             var self = this;
+            var n = 0;
             var wait = setInterval(function() {
+              // console.log('waiting..' + n);
                 if (elements
                     .filter(function(el) {
                         return el.selector === "" || document.querySelector(self._getElementClassName(el));
@@ -75,6 +84,10 @@ define([
                     self._startIntro();
                     clearInterval(wait);
                 }
+                else if (++n > 20) { // 2 seconds
+                  clearInterval(wait);
+                  mx.ui.info(self.errorMessage, true);
+                }
             }, 100);
         },
 
@@ -84,7 +97,7 @@ define([
                     ? modelerStep.isMendixName
                       ? '.mx-name-' + modelerStep.selector
                       : modelerStep.selector
-                      : null; // default to an element so we don't get an infinite loop
+                    : null; // default to an element so we don't get an infinite loop
         },
 
         _setupIntro: function() {
@@ -105,7 +118,6 @@ define([
         },
 
         _startIntro: function() {
-
             var intro = Intro();
             intro.setOptions({
                 steps: this._introSteps
@@ -115,12 +127,13 @@ define([
 
         _updateRendering: function(callback) {
             logger.debug(this.id + "._updateRendering");
-            this._waitForStepElements(this.steps);
+            this.buttonNode.innerHTML = this.buttonText;
+
 
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
             } else {
-                dojoStyle.set(this.domNode, "display", "none");
+                // dojoStyle.set(this.domNode, "display", "none");
             }
 
             this._executeCallback(callback);
