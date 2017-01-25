@@ -7,6 +7,18 @@
 
 
     <properties>
+      <property key="beforeMf" type="microflow" required="false">
+          <caption>Auto Run</caption>
+          <category>Behavior</category>
+          <description>If the microflow returns true, the walkthrough will run</description>
+          <returnType type="Boolean"></returnType>
+      </property>
+      <property key="afterMf" type="microflow" required="false">
+          <caption>Callllback</caption>
+          <category>Behavior</category>
+          <description>This Microflow will run when the user completes the walkthrough.</description>
+          <returnType type="Void"></returnType>
+      </property>
       <property key="buttonText" type="string" required="false" defaultValue="">
           <caption>Button Text</caption>
           <category>Appearance</category>
@@ -16,6 +28,24 @@
           <caption>Error Message</caption>
           <category>Appearance</category>
           <description>Message to display if the Walkthrough Initialization fails.</description>
+      </property>
+      <property key="buttonBootstrap" type="enumeration" defaultValue="default">
+          <caption>Button Class</caption>
+          <category>Appearance</category>
+          <description>Select a standard styling for the button</description>
+          <enumerationValues>
+              <enumerationValue key="default">Default</enumerationValue>
+              <enumerationValue key="primary">Primary</enumerationValue>
+              <enumerationValue key="info">Info</enumerationValue>
+              <enumerationValue key="warning">Warning</enumerationValue>
+              <enumerationValue key="danger">Danger</enumerationValue>
+              <enumerationValue key="inverse">Inverse</enumerationValue>
+          </enumerationValues>
+      </property>
+      <property key="buttonExtraClass" type="string" required="false" defaultValue="">
+          <caption>Extra Button Class</caption>
+          <category>Appearance</category>
+          <description>Extra Classes to Apply to the Button</description>
       </property>
         <property key="steps" type="object" required="false" isList="true">
             <caption>Intro steps</caption>

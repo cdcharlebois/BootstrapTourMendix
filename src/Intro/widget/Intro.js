@@ -34,7 +34,11 @@ define([
 
         // modeler
         steps: null,
+        beforeMf: null,
+        afterMf: null,
         buttonText: "",
+        buttonBootstrap: "",
+        buttonExtraClass: "",
         errorMessage: "",
 
         constructor: function() {
@@ -49,7 +53,25 @@ define([
             logger.debug(this.id + ".update");
 
             this._contextObj = obj;
+            var self = this;
+            if (this._contextObj && this.beforeMf) {
+                mx.data.action({
+                    params: {
+                        actionname: this.beforeMf,
+                        applyto: "selection",
+                        guids: [this._contextObj.getGuid()]
+                    },
+                    callback: function(res) {
+                        if (res) self._waitForStepElements(self.steps);
+                    },
+                    error: function(err) {
+                        // console.log(err)
+                    }
+                });
+            }
             this._setupListeners();
+
+            // this._waitForStepElements(this.steps);
             this._updateRendering(callback);
         },
 
@@ -62,18 +84,18 @@ define([
         },
 
         _setupListeners: function() {
-          this.buttonNode.addEventListener('click', lang.hitch(this, this._doClick));
+            this.buttonNode.addEventListener('click', lang.hitch(this, this._doClick));
         },
 
         _doClick: function() {
-          this._waitForStepElements(this.steps);
+            this._waitForStepElements(this.steps);
         },
 
         _waitForStepElements: function(elements) {
             var self = this;
             var n = 0;
             var wait = setInterval(function() {
-              // console.log('waiting..' + n);
+                // console.log('waiting..' + n);
                 if (elements
                     .filter(function(el) {
                         return el.selector === "" || document.querySelector(self._getElementClassName(el));
@@ -83,21 +105,20 @@ define([
                     self._setupIntro();
                     self._startIntro();
                     clearInterval(wait);
-                }
-                else if (++n > 20) { // 2 seconds
-                  clearInterval(wait);
-                  mx.ui.info(self.errorMessage, true);
+                } else if (++n > 20) { // 2 seconds
+                    clearInterval(wait);
+                    mx.ui.info(self.errorMessage, true);
                 }
             }, 100);
         },
 
         _getElementClassName: function(modelerStep) {
             // debugger;
-            return modelerStep.selector
-                    ? modelerStep.isMendixName
-                      ? '.mx-name-' + modelerStep.selector
-                      : modelerStep.selector
-                    : null; // default to an element so we don't get an infinite loop
+            return modelerStep.selector ?
+                modelerStep.isMendixName ?
+                '.mx-name-' + modelerStep.selector :
+                modelerStep.selector :
+                null; // default to an element so we don't get an infinite loop
         },
 
         _setupIntro: function() {
@@ -107,10 +128,8 @@ define([
                     intro: s.intro ? s.intro : '',
                     element: self._getElementClassName(s),
                     position: 'bottom'
-                    // position: s.position && self._isValidPosition(s.position) ? s.position : 'bottom'
                 };
             });
-            // if (callback) lang.hitch(callback, this);
         },
 
         _isValidPosition: function(pos) {
@@ -122,19 +141,36 @@ define([
             intro.setOptions({
                 steps: this._introSteps
             });
-            intro.start();
+            var self = this;
+            intro.start().oncomplete(function() {
+                if (self.afterMf) {
+                    var opts = {
+                        actionname: self.afterMf,
+                    };
+                    if (self._contextObj) {
+                        opts.applyto = "selection";
+                        opts.guids = [self._contextObj.getGuid()];
+                    } else {
+                        opts.applyto = "none";  // handle a callback with no context
+                    }
+                    mx.data.action({
+                        params: opts,
+                        callback: function(res) {
+                            // self.afterMf;
+                        },
+                        error: function(err) {
+                            console.info("there was an error evaluating the callback" + err);
+                        }
+                    });
+                }
+            });
         },
 
         _updateRendering: function(callback) {
             logger.debug(this.id + "._updateRendering");
             this.buttonNode.innerHTML = this.buttonText;
-
-
-            if (this._contextObj !== null) {
-                dojoStyle.set(this.domNode, "display", "block");
-            } else {
-                // dojoStyle.set(this.domNode, "display", "none");
-            }
+            dojoClass.add(this.buttonNode, 'btn-' + this.buttonBootstrap);
+            dojoClass.add(this.buttonNode, this.buttonExtraClass);
 
             this._executeCallback(callback);
         },

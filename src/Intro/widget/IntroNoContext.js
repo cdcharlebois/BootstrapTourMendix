@@ -5,7 +5,7 @@ require([
     "use strict";
 
     return declare("Intro.widget.IntroNoContext", [IntroBase], {
-      
+
     });
 
 });
