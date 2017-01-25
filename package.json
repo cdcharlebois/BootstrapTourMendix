@@ -1,12 +1,11 @@
 {
   "name": "Intro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Mendix wrapper for Intro.js to provide an interactive tour of features of your application",
   "license": "Apache 2",
   "author": "Conner Charlebois",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "del": "^2.2.2",
     "gulp": "^3.9.1",
