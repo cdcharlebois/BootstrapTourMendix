@@ -14,6 +14,10 @@ Highlight and guide users through new features or explain existing functionality
         4. `Position` : where (relative to the component) should the popover appear?
     2. On the **Appearance** tab, add the Button Text and Error Message
 
+### Disclaimer
+
+This widget includes the [IntroJS](http://introjs.com/) library. In order to use in a commercial application, you need to buy a commercial license [here](http://introjs.com/#commercial).
+
 
 ###### Mendix Widget Boilerplate
 
