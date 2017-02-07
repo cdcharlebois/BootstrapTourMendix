@@ -14,12 +14,12 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
-    "Intro/widget/lib/intro",
+    "Intro/widget/lib/bootstrap-tour",
     "dijit/_TemplatedMixin",
     "dojo/text!Intro/widget/template/Intro.html"
 
 
-], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, Intro, _TemplatedMixin, template) {
+], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, Tour, _TemplatedMixin, template) {
     "use strict";
 
     return declare("Intro.widget.Intro", [_WidgetBase, _TemplatedMixin], {
@@ -125,9 +125,9 @@ define([
             var self = this;
             this._introSteps = this.steps.map(function(s) {
                 return {
-                    intro: s.intro ? s.intro : '',
+                    content: s.intro ? s.intro : '',
                     element: self._getElementClassName(s),
-                    position: 'bottom'
+                    title: 'Some Title'
                 };
             });
         },
@@ -137,33 +137,33 @@ define([
         },
 
         _startIntro: function() {
-            var intro = Intro();
-            intro.setOptions({
-                steps: this._introSteps
-            });
             var self = this;
-            intro.start().oncomplete(function() {
-                if (self.afterMf) {
-                    var opts = {
-                        actionname: self.afterMf,
-                    };
-                    if (self._contextObj) {
-                        opts.applyto = "selection";
-                        opts.guids = [self._contextObj.getGuid()];
-                    } else {
-                        opts.applyto = "none";  // handle a callback with no context
-                    }
-                    mx.data.action({
-                        params: opts,
-                        callback: function(res) {
-                            // self.afterMf;
-                        },
-                        error: function(err) {
-                            console.info("there was an error evaluating the callback" + err);
+            var tour = new Tour({
+                steps: self._introSteps,
+                onEnd: function() {
+                    if (self.afterMf) {
+                        var opts = {
+                            actionname: self.afterMf,
+                        };
+                        if (self._contextObj) {
+                            opts.applyto = "selection";
+                            opts.guids = [self._contextObj.getGuid()];
+                        } else {
+                            opts.applyto = "none"; // handle a callback with no context
                         }
-                    });
+                        mx.data.action({
+                            params: opts,
+                            callback: function(res) {
+                                // self.afterMf;
+                            },
+                            error: function(err) {
+                                console.info("there was an error evaluating the callback" + err);
+                            }
+                        });
+                    }
                 }
             });
+            tour.start();
         },
 
         _updateRendering: function(callback) {
