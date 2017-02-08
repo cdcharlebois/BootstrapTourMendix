@@ -14,13 +14,15 @@ define([
     "dojo/text",
     "dojo/html",
     "dojo/_base/event",
-    "Intro/widget/lib/intro",
+    "Intro/widget/lib/jquery",
+    "Intro/widget/lib/bootstrap-tour-standalone",
     "dijit/_TemplatedMixin",
     "dojo/text!Intro/widget/template/Intro.html"
 
 
-], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, Intro, _TemplatedMixin, template) {
+], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, jQuery, Tour, _TemplatedMixin, template) {
     "use strict";
+    var $ = jQuery.noConflict(true);
 
     return declare("Intro.widget.Intro", [_WidgetBase, _TemplatedMixin], {
 
@@ -62,7 +64,7 @@ define([
                         guids: [this._contextObj.getGuid()]
                     },
                     callback: function(res) {
-                        if (res) self._waitForStepElements(self.steps);
+                        if (res) self._waitForStepElements(self.steps, res);
                     },
                     error: function(err) {
                         // console.log(err)
@@ -71,7 +73,7 @@ define([
             }
             this._setupListeners();
 
-            // this._waitForStepElements(this.steps);
+            this._waitForStepElements(this.steps, false);
             this._updateRendering(callback);
         },
 
@@ -88,10 +90,10 @@ define([
         },
 
         _doClick: function() {
-            this._waitForStepElements(this.steps);
+            this._waitForStepElements(this.steps, true);
         },
 
-        _waitForStepElements: function(elements) {
+        _waitForStepElements: function(elements, force) {
             var self = this;
             var n = 0;
             var wait = setInterval(function() {
@@ -102,8 +104,8 @@ define([
                     })
                     .length == elements.length
                 ) {
-                    self._setupIntro();
-                    self._startIntro();
+                    self._setupTour();
+                    self._startTour(force);
                     clearInterval(wait);
                 } else if (++n > 20) { // 2 seconds
                     clearInterval(wait);
@@ -121,49 +123,53 @@ define([
                 null; // default to an element so we don't get an infinite loop
         },
 
-        _setupIntro: function() {
+        _setupTour: function() {
             var self = this;
             this._introSteps = this.steps.map(function(s) {
                 return {
-                    intro: s.intro ? s.intro : '',
+                    content: s.intro ? s.intro : '',
                     element: self._getElementClassName(s),
-                    position: 'bottom'
+                    orphan: !self._getElementClassName(s),
+                    title: s.stepTitle? s.stepTitle : '',
+                    backdrop: s.backdrop,
+                    backdropPadding: 5,
+                    placement: s.position,
+                    reflex: s.clickToContinue
                 };
             });
         },
 
-        _isValidPosition: function(pos) {
-            return ['right', 'left', 'bottom', 'top'].indexOf(pos) != -1;
-        },
-
-        _startIntro: function() {
-            var intro = Intro();
-            intro.setOptions({
-                steps: this._introSteps
-            });
+        _startTour: function(force) {
             var self = this;
-            intro.start().oncomplete(function() {
-                if (self.afterMf) {
-                    var opts = {
-                        actionname: self.afterMf,
-                    };
-                    if (self._contextObj) {
-                        opts.applyto = "selection";
-                        opts.guids = [self._contextObj.getGuid()];
-                    } else {
-                        opts.applyto = "none";  // handle a callback with no context
-                    }
-                    mx.data.action({
-                        params: opts,
-                        callback: function(res) {
-                            // self.afterMf;
-                        },
-                        error: function(err) {
-                            console.info("there was an error evaluating the callback" + err);
+            var tour = new Tour({
+                steps: self._introSteps,
+                onEnd: function() {
+                    if (self.afterMf) {
+                        var opts = {
+                            actionname: self.afterMf,
+                        };
+                        if (self._contextObj) {
+                            opts.applyto = "selection";
+                            opts.guids = [self._contextObj.getGuid()];
+                        } else {
+                            opts.applyto = "none"; // handle a callback with no context
                         }
-                    });
+                        mx.data.action({
+                            params: opts,
+                            callback: function(res) {
+                                // self.afterMf;
+                            },
+                            error: function(err) {
+                                console.info("there was an error evaluating the callback" + err);
+                            }
+                        });
+                    }
                 }
             });
+
+            tour.start(force);
+            tour.goTo(0);
+
         },
 
         _updateRendering: function(callback) {

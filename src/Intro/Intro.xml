@@ -13,11 +13,11 @@
         <property key="beforeMf" type="microflow" required="false">
             <caption>Auto Run</caption>
             <category>Behavior</category>
-            <description>If the microflow returns true, the walkthrough will run</description>
+            <description>If the microflow returns true, the walkthrough will run, leave empty to run each pageload. By default, the walkthrough will only run once. It will always run when the user clicks the button. Implement a microflow here to override the default "once" behavior</description>
             <returnType type="Boolean"></returnType>
         </property>
         <property key="afterMf" type="microflow" required="false">
-            <caption>Callllback</caption>
+            <caption>Callback</caption>
             <category>Behavior</category>
             <description>This Microflow will run when the user completes the walkthrough.</description>
             <returnType type="Void"></returnType>
@@ -65,16 +65,37 @@
                     <category>Main</category>
                     <description>Choose 'Yes' is you're using the Mendix component name as the selector</description>
                 </property>
+                <property key="stepTitle" type="string" required="false" defaultValue="">
+                    <caption>Title</caption>
+                    <category>Main</category>
+                    <description>The text that will appear as the title of the popover step</description>
+                </property>
                 <property key="intro" type="string" required="false">
                     <caption>Text</caption>
                     <category>Main</category>
                     <description>The text that will show up in the walkthrough step. HTML tags are welcome.</description>
                 </property>
-                <property key="position" type="string" required="false">
-                    <caption>Position</caption>
+                <property key="position" type="enumeration" defaultValue="top">
+                    <caption>Popover Position</caption>
                     <category>Main</category>
-                    <description>The position (relative to `Element`) for the walkthrough step to appear. Acceptable values are: top | right | bottom | left. Defaults to "bottom"</description>
+                    <description>The position (relative to `Element`) for the walkthrough step to appear</description>
+                    <enumerationValues>
+                        <enumerationValue key="top">Top</enumerationValue>
+                        <enumerationValue key="right">Right</enumerationValue>
+                        <enumerationValue key="bottom">Bottom</enumerationValue>
+                        <enumerationValue key="left">Left</enumerationValue>
+                    </enumerationValues>
                 </property>
+                 <property key="backdrop" type="boolean" required="true" defaultValue="true">
+                     <caption>Show Backdrop?</caption>
+                     <category>Main</category>
+                     <description>If enabled, the rest of the page will have a dark filter. Useful to highlighting main content areas.</description>
+                 </property>
+                  <property key="clickToContinue" type="boolean" required="true" defaultValue="false">
+                      <caption>Click to Continue</caption>
+                      <category>Main</category>
+                      <description>If enabled, clicking on `Element` will progress to walkthrough. Useful when highlighting buttons.</description>
+                  </property>
             </properties>
         </property>
     </properties>
