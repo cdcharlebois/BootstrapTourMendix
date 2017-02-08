@@ -18,7 +18,7 @@ Highlight and guide users through new features or explain existing functionality
     3. On the **Behavior** tab, you can add:
         1. `Auto Run` : A microflow to run to determine if the tour should start automatically
             > Default Behavior is that the tour will show once per user, and then they can always click the button to view it again. You can override this behavior using this microflow
-
+ 
         2. `Callback` : A microflow that runs when a user ends the tour.
 
 ### Known limitations
