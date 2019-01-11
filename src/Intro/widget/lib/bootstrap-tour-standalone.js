@@ -27,8 +27,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-
-+function ($) {
+var f1 = function ($) {
   'use strict';
 
   // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
@@ -38,10 +37,10 @@
     var el = document.createElement('bootstrap')
 
     var transEndEventNames = {
-      WebkitTransition : 'webkitTransitionEnd',
-      MozTransition    : 'transitionend',
-      OTransition      : 'oTransitionEnd otransitionend',
-      transition       : 'transitionend'
+      WebkitTransition: 'webkitTransitionEnd',
+      MozTransition: 'transitionend',
+      OTransition: 'oTransitionEnd otransitionend',
+      transition: 'transitionend'
     }
 
     for (var name in transEndEventNames) {
@@ -77,7 +76,7 @@
     }
   })
 
-}(jQuery);
+}
 
 /* ========================================================================
  * Bootstrap: tooltip.js v3.3.7
@@ -89,25 +88,25 @@
  * ======================================================================== */
 
 
-+function ($) {
+var f2 = function ($) {
   'use strict';
 
   // TOOLTIP PUBLIC CLASS DEFINITION
   // ===============================
 
   var Tooltip = function (element, options) {
-    this.type       = null
-    this.options    = null
-    this.enabled    = null
-    this.timeout    = null
+    this.type = null
+    this.options = null
+    this.enabled = null
+    this.timeout = null
     this.hoverState = null
-    this.$element   = null
-    this.inState    = null
+    this.$element = null
+    this.inState = null
 
     this.init('tooltip', element, options)
   }
 
-  Tooltip.VERSION  = '3.3.7'
+  Tooltip.VERSION = '3.3.7'
 
   Tooltip.TRANSITION_DURATION = 150
 
@@ -128,12 +127,12 @@
   }
 
   Tooltip.prototype.init = function (type, element, options) {
-    this.enabled   = true
-    this.type      = type
-    this.$element  = $(element)
-    this.options   = this.getOptions(options)
+    this.enabled = true
+    this.type = type
+    this.$element = $(element)
+    this.options = this.getOptions(options)
     this.$viewport = this.options.viewport && $($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : (this.options.viewport.selector || this.options.viewport))
-    this.inState   = { click: false, hover: false, focus: false }
+    this.inState = { click: false, hover: false, focus: false }
 
     if (this.$element[0] instanceof document.constructor && !this.options.selector) {
       throw new Error('`selector` option must be specified when initializing ' + this.type + ' on the window.document object!')
@@ -147,10 +146,10 @@
       if (trigger == 'click') {
         this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
       } else if (trigger != 'manual') {
-        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focusin'
+        var eventIn = trigger == 'hover' ? 'mouseenter' : 'focusin'
         var eventOut = trigger == 'hover' ? 'mouseleave' : 'focusout'
 
-        this.$element.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+        this.$element.on(eventIn + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
         this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
       }
     }
@@ -178,7 +177,7 @@
   }
 
   Tooltip.prototype.getDelegateOptions = function () {
-    var options  = {}
+    var options = {}
     var defaults = this.getDefaults()
 
     this._options && $.each(this._options, function (key, value) {
@@ -288,19 +287,19 @@
       this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
       this.$element.trigger('inserted.bs.' + this.type)
 
-      var pos          = this.getPosition()
-      var actualWidth  = $tip[0].offsetWidth
+      var pos = this.getPosition()
+      var actualWidth = $tip[0].offsetWidth
       var actualHeight = $tip[0].offsetHeight
 
       if (autoPlace) {
         var orgPlacement = placement
         var viewportDim = this.getPosition(this.$viewport)
 
-        placement = placement == 'bottom' && pos.bottom + actualHeight > viewportDim.bottom ? 'top'    :
-                    placement == 'top'    && pos.top    - actualHeight < viewportDim.top    ? 'bottom' :
-                    placement == 'right'  && pos.right  + actualWidth  > viewportDim.width  ? 'left'   :
-                    placement == 'left'   && pos.left   - actualWidth  < viewportDim.left   ? 'right'  :
-                    placement
+        placement = placement == 'bottom' && pos.bottom + actualHeight > viewportDim.bottom ? 'top' :
+          placement == 'top' && pos.top - actualHeight < viewportDim.top ? 'bottom' :
+            placement == 'right' && pos.right + actualWidth > viewportDim.width ? 'left' :
+              placement == 'left' && pos.left - actualWidth < viewportDim.left ? 'right' :
+                placement
 
         $tip
           .removeClass(orgPlacement)
@@ -328,8 +327,8 @@
   }
 
   Tooltip.prototype.applyPlacement = function (offset, placement) {
-    var $tip   = this.tip()
-    var width  = $tip[0].offsetWidth
+    var $tip = this.tip()
+    var width = $tip[0].offsetWidth
     var height = $tip[0].offsetHeight
 
     // manually read margins because getBoundingClientRect includes difference
@@ -337,10 +336,10 @@
     var marginLeft = parseInt($tip.css('margin-left'), 10)
 
     // we must check for NaN for ie 8/9
-    if (isNaN(marginTop))  marginTop  = 0
+    if (isNaN(marginTop)) marginTop = 0
     if (isNaN(marginLeft)) marginLeft = 0
 
-    offset.top  += marginTop
+    offset.top += marginTop
     offset.left += marginLeft
 
     // $.fn.offset doesn't round pixel values
@@ -357,7 +356,7 @@
     $tip.addClass('in')
 
     // check to see if placing tip in new offset caused the tip to resize itself
-    var actualWidth  = $tip[0].offsetWidth
+    var actualWidth = $tip[0].offsetWidth
     var actualHeight = $tip[0].offsetHeight
 
     if (placement == 'top' && actualHeight != height) {
@@ -369,8 +368,8 @@
     if (delta.left) offset.left += delta.left
     else offset.top += delta.top
 
-    var isVertical          = /top|bottom/.test(placement)
-    var arrowDelta          = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight
+    var isVertical = /top|bottom/.test(placement)
+    var arrowDelta = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight
     var arrowOffsetPosition = isVertical ? 'offsetWidth' : 'offsetHeight'
 
     $tip.offset(offset)
@@ -384,7 +383,7 @@
   }
 
   Tooltip.prototype.setContent = function () {
-    var $tip  = this.tip()
+    var $tip = this.tip()
     var title = this.getTitle()
 
     $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
@@ -394,7 +393,7 @@
   Tooltip.prototype.hide = function (callback) {
     var that = this
     var $tip = $(this.$tip)
-    var e    = $.Event('hide.bs.' + this.type)
+    var e = $.Event('hide.bs.' + this.type)
 
     function complete() {
       if (that.hoverState != 'in') $tip.detach()
@@ -435,12 +434,12 @@
   }
 
   Tooltip.prototype.getPosition = function ($element) {
-    $element   = $element || this.$element
+    $element = $element || this.$element
 
-    var el     = $element[0]
+    var el = $element[0]
     var isBody = el.tagName == 'BODY'
 
-    var elRect    = el.getBoundingClientRect()
+    var elRect = el.getBoundingClientRect()
     if (elRect.width == null) {
       // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
       elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
@@ -448,17 +447,17 @@
     var isSvg = window.SVGElement && el instanceof window.SVGElement
     // Avoid using $.offset() on SVGs since it gives incorrect results in jQuery 3.
     // See https://github.com/twbs/bootstrap/issues/20280
-    var elOffset  = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
-    var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
+    var elOffset = isBody ? { top: 0, left: 0 } : (isSvg ? null : $element.offset())
+    var scroll = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
     var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
 
     return $.extend({}, elRect, scroll, outerDims, elOffset)
   }
 
   Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-    return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2 } :
-           placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
-           placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
+    return placement == 'bottom' ? { top: pos.top + pos.height, left: pos.left + pos.width / 2 - actualWidth / 2 } :
+      placement == 'top' ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
+        placement == 'left' ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
         /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width }
 
   }
@@ -471,7 +470,7 @@
     var viewportDimensions = this.getPosition(this.$viewport)
 
     if (/right|left/.test(placement)) {
-      var topEdgeOffset    = pos.top - viewportPadding - viewportDimensions.scroll
+      var topEdgeOffset = pos.top - viewportPadding - viewportDimensions.scroll
       var bottomEdgeOffset = pos.top + viewportPadding - viewportDimensions.scroll + actualHeight
       if (topEdgeOffset < viewportDimensions.top) { // top overflow
         delta.top = viewportDimensions.top - topEdgeOffset
@@ -479,7 +478,7 @@
         delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset
       }
     } else {
-      var leftEdgeOffset  = pos.left - viewportPadding
+      var leftEdgeOffset = pos.left - viewportPadding
       var rightEdgeOffset = pos.left + viewportPadding + actualWidth
       if (leftEdgeOffset < viewportDimensions.left) { // left overflow
         delta.left = viewportDimensions.left - leftEdgeOffset
@@ -494,10 +493,10 @@
   Tooltip.prototype.getTitle = function () {
     var title
     var $e = this.$element
-    var o  = this.options
+    var o = this.options
 
     title = $e.attr('data-original-title')
-      || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+      || (typeof o.title == 'function' ? o.title.call($e[0]) : o.title)
 
     return title
   }
@@ -574,8 +573,8 @@
 
   function Plugin(option) {
     return this.each(function () {
-      var $this   = $(this)
-      var data    = $this.data('bs.tooltip')
+      var $this = $(this)
+      var data = $this.data('bs.tooltip')
       var options = typeof option == 'object' && option
 
       if (!data && /destroy|hide/.test(option)) return
@@ -586,7 +585,7 @@
 
   var old = $.fn.tooltip
 
-  $.fn.tooltip             = Plugin
+  $.fn.tooltip = Plugin
   $.fn.tooltip.Constructor = Tooltip
 
 
@@ -598,7 +597,7 @@
     return this
   }
 
-}(jQuery);
+};
 
 /* ========================================================================
  * Bootstrap: popover.js v3.3.7
@@ -609,7 +608,7 @@
  * ======================================================================== */
 
 
-+function ($) {
+var f3 = function ($) {
   'use strict';
 
   // POPOVER PUBLIC CLASS DEFINITION
@@ -621,7 +620,7 @@
 
   if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
 
-  Popover.VERSION  = '3.3.7'
+  Popover.VERSION = '3.3.7'
 
   Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
     placement: 'right',
@@ -643,8 +642,8 @@
   }
 
   Popover.prototype.setContent = function () {
-    var $tip    = this.tip()
-    var title   = this.getTitle()
+    var $tip = this.tip()
+    var title = this.getTitle()
     var content = this.getContent()
 
     $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
@@ -665,12 +664,12 @@
 
   Popover.prototype.getContent = function () {
     var $e = this.$element
-    var o  = this.options
+    var o = this.options
 
     return $e.attr('data-content')
       || (typeof o.content == 'function' ?
-            o.content.call($e[0]) :
-            o.content)
+        o.content.call($e[0]) :
+        o.content)
   }
 
   Popover.prototype.arrow = function () {
@@ -683,8 +682,8 @@
 
   function Plugin(option) {
     return this.each(function () {
-      var $this   = $(this)
-      var data    = $this.data('bs.popover')
+      var $this = $(this)
+      var data = $this.data('bs.popover')
       var options = typeof option == 'object' && option
 
       if (!data && /destroy|hide/.test(option)) return
@@ -695,7 +694,7 @@
 
   var old = $.fn.popover
 
-  $.fn.popover             = Plugin
+  $.fn.popover = Plugin
   $.fn.popover.Constructor = Popover
 
 
@@ -707,11 +706,14 @@
     return this
   }
 
-}(jQuery);
+};
 
-(function(window, factory) {
+(function (window, factory) {
   if (typeof define === 'function' && define.amd) {
-    return define(['Intro/widget/lib/jquery'], function(jQuery) {
+    return define(['Intro/widget/lib/jquery'], function (jQuery) {
+      f1(jQuery);
+      f2(jQuery);
+      f3(jQuery);
       return window.Tour = factory(jQuery);
     });
   } else if (typeof exports === 'object') {
@@ -719,10 +721,10 @@
   } else {
     return window.Tour = factory(window.jQuery);
   }
-})(window, function($) {
+})(window, function ($) {
   var Tour, document;
   document = window.document;
-  Tour = (function() {
+  Tour = (function () {
     function Tour(options) {
       var storage;
       try {
@@ -747,20 +749,20 @@
         delay: false,
         basePath: '',
         template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="next">Next &raquo;</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> <button class="btn btn-sm btn-default" data-role="end">End tour</button> </div> </div>',
-        afterSetState: function(key, value) {},
-        afterGetState: function(key, value) {},
-        afterRemoveState: function(key) {},
-        onStart: function(tour) {},
-        onEnd: function(tour) {},
-        onShow: function(tour) {},
-        onShown: function(tour) {},
-        onHide: function(tour) {},
-        onHidden: function(tour) {},
-        onNext: function(tour) {},
-        onPrev: function(tour) {},
-        onPause: function(tour, duration) {},
-        onResume: function(tour, duration) {},
-        onRedirectError: function(tour) {}
+        afterSetState: function (key, value) { },
+        afterGetState: function (key, value) { },
+        afterRemoveState: function (key) { },
+        onStart: function (tour) { },
+        onEnd: function (tour) { },
+        onShow: function (tour) { },
+        onShown: function (tour) { },
+        onHide: function (tour) { },
+        onHidden: function (tour) { },
+        onNext: function (tour) { },
+        onPrev: function (tour) { },
+        onPause: function (tour, duration) { },
+        onResume: function (tour, duration) { },
+        onRedirectError: function (tour) { }
       }, options);
       this._force = false;
       this._inited = false;
@@ -769,7 +771,7 @@
       this;
     }
 
-    Tour.prototype.addSteps = function(steps) {
+    Tour.prototype.addSteps = function (steps) {
       var step, _i, _len;
       for (_i = 0, _len = steps.length; _i < _len; _i++) {
         step = steps[_i];
@@ -778,12 +780,12 @@
       return this;
     };
 
-    Tour.prototype.addStep = function(step) {
+    Tour.prototype.addStep = function (step) {
       this._options.steps.push(step);
       return this;
     };
 
-    Tour.prototype.getStep = function(i) {
+    Tour.prototype.getStep = function (i) {
       if (this._options.steps[i] != null) {
         return $.extend({
           id: "step-" + i,
@@ -820,7 +822,7 @@
       }
     };
 
-    Tour.prototype.init = function(force) {
+    Tour.prototype.init = function (force) {
       this._force = force;
       if (this.ended()) {
         this._debug('Tour ended, init prevented.');
@@ -829,8 +831,8 @@
       this.setCurrentStep();
       this._initMouseNavigation();
       this._initKeyboardNavigation();
-      this._onResize((function(_this) {
-        return function() {
+      this._onResize((function (_this) {
+        return function () {
           return _this.showStep(_this._current);
         };
       })(this));
@@ -841,7 +843,7 @@
       return this;
     };
 
-    Tour.prototype.start = function(force) {
+    Tour.prototype.start = function (force) {
       var promise;
       if (force == null) {
         force = false;
@@ -856,28 +858,28 @@
       return this;
     };
 
-    Tour.prototype.next = function() {
+    Tour.prototype.next = function () {
       var promise;
       promise = this.hideStep(this._current, this._current + 1);
       return this._callOnPromiseDone(promise, this._showNextStep);
     };
 
-    Tour.prototype.prev = function() {
+    Tour.prototype.prev = function () {
       var promise;
       promise = this.hideStep(this._current, this._current - 1);
       return this._callOnPromiseDone(promise, this._showPrevStep);
     };
 
-    Tour.prototype.goTo = function(i) {
+    Tour.prototype.goTo = function (i) {
       var promise;
       promise = this.hideStep(this._current, i);
       return this._callOnPromiseDone(promise, this.showStep, i);
     };
 
-    Tour.prototype.end = function() {
+    Tour.prototype.end = function () {
       var endHelper, promise;
-      endHelper = (function(_this) {
-        return function(e) {
+      endHelper = (function (_this) {
+        return function (e) {
           $(document).off("click.tour-" + _this._options.name);
           $(document).off("keyup.tour-" + _this._options.name);
           $(window).off("resize.tour-" + _this._options.name);
@@ -894,18 +896,18 @@
       return this._callOnPromiseDone(promise, endHelper);
     };
 
-    Tour.prototype.ended = function() {
+    Tour.prototype.ended = function () {
       return !this._force && !!this._getState('end');
     };
 
-    Tour.prototype.restart = function() {
+    Tour.prototype.restart = function () {
       this._removeState('current_step');
       this._removeState('end');
       this._removeState('redirect_to');
       return this.start();
     };
 
-    Tour.prototype.pause = function() {
+    Tour.prototype.pause = function () {
       var step;
       step = this.getStep(this._current);
       if (!(step && step.duration)) {
@@ -920,7 +922,7 @@
       }
     };
 
-    Tour.prototype.resume = function() {
+    Tour.prototype.resume = function () {
       var step;
       step = this.getStep(this._current);
       if (!(step && step.duration)) {
@@ -929,8 +931,8 @@
       this._paused = false;
       this._start = new Date().getTime();
       this._duration = this._duration || step.duration;
-      this._timer = window.setTimeout((function(_this) {
-        return function() {
+      this._timer = window.setTimeout((function (_this) {
+        return function () {
           if (_this._isLast()) {
             return _this.next();
           } else {
@@ -944,7 +946,7 @@
       }
     };
 
-    Tour.prototype.hideStep = function(i, iNext) {
+    Tour.prototype.hideStep = function (i, iNext) {
       var hideDelay, hideStepHelper, promise, step;
       step = this.getStep(i);
       if (!step) {
@@ -952,8 +954,8 @@
       }
       this._clearTimer();
       promise = this._makePromise(step.onHide != null ? step.onHide(this, i) : void 0);
-      hideStepHelper = (function(_this) {
-        return function(e) {
+      hideStepHelper = (function (_this) {
+        return function (e) {
           var $element, next_step;
           $element = $(step.element);
           if (!($element.data('bs.popover') || $element.data('popover'))) {
@@ -977,8 +979,8 @@
       hideDelay = step.delay.hide || step.delay;
       if ({}.toString.call(hideDelay) === '[object Number]' && hideDelay > 0) {
         this._debug("Wait " + hideDelay + " milliseconds to hide the step " + (this._current + 1));
-        window.setTimeout((function(_this) {
-          return function() {
+        window.setTimeout((function (_this) {
+          return function () {
             return _this._callOnPromiseDone(promise, hideStepHelper);
           };
         })(this), hideDelay);
@@ -988,7 +990,7 @@
       return promise;
     };
 
-    Tour.prototype.showStep = function(i) {
+    Tour.prototype.showStep = function (i) {
       var path, promise, showDelay, showStepHelper, skipToPrevious, step;
       if (this.ended()) {
         this._debug('Tour ended, showStep prevented.');
@@ -1001,7 +1003,7 @@
       skipToPrevious = i < this._current;
       promise = this._makePromise(step.onShow != null ? step.onShow(this, i) : void 0);
       this.setCurrentStep(i);
-      path = (function() {
+      path = (function () {
         switch ({}.toString.call(step.path)) {
           case '[object Function]':
             return step.path();
@@ -1017,8 +1019,8 @@
           return;
         }
       }
-      showStepHelper = (function(_this) {
-        return function(e) {
+      showStepHelper = (function (_this) {
+        return function (e) {
           var showPopoverAndOverlay;
           if (_this._isOrphan(step)) {
             if (step.orphan === false) {
@@ -1032,7 +1034,7 @@
             }
             _this._debug("Show the orphan step " + (_this._current + 1) + ". Orphans option is true.");
           }
-          showPopoverAndOverlay = function() {
+          showPopoverAndOverlay = function () {
             if (_this.getCurrentStep() !== i || _this.ended()) {
               return;
             }
@@ -1058,8 +1060,8 @@
       showDelay = step.delay.show || step.delay;
       if ({}.toString.call(showDelay) === '[object Number]' && showDelay > 0) {
         this._debug("Wait " + showDelay + " milliseconds to show the step " + (this._current + 1));
-        window.setTimeout((function(_this) {
-          return function() {
+        window.setTimeout((function (_this) {
+          return function () {
             return _this._callOnPromiseDone(promise, showStepHelper);
           };
         })(this), showDelay);
@@ -1069,11 +1071,11 @@
       return promise;
     };
 
-    Tour.prototype.getCurrentStep = function() {
+    Tour.prototype.getCurrentStep = function () {
       return this._current;
     };
 
-    Tour.prototype.setCurrentStep = function(value) {
+    Tour.prototype.setCurrentStep = function (value) {
       if (value != null) {
         this._current = value;
         this._setState('current_step', value);
@@ -1084,11 +1086,11 @@
       return this;
     };
 
-    Tour.prototype.redraw = function() {
+    Tour.prototype.redraw = function () {
       return this._showOverlayElement(this.getStep(this.getCurrentStep()));
     };
 
-    Tour.prototype._setState = function(key, value) {
+    Tour.prototype._setState = function (key, value) {
       var e, keyName;
       if (this._options.storage) {
         keyName = "" + this._options.name + "_" + key;
@@ -1109,7 +1111,7 @@
       }
     };
 
-    Tour.prototype._removeState = function(key) {
+    Tour.prototype._removeState = function (key) {
       var keyName;
       if (this._options.storage) {
         keyName = "" + this._options.name + "_" + key;
@@ -1122,7 +1124,7 @@
       }
     };
 
-    Tour.prototype._getState = function(key) {
+    Tour.prototype._getState = function (key) {
       var keyName, value;
       if (this._options.storage) {
         keyName = "" + this._options.name + "_" + key;
@@ -1139,11 +1141,11 @@
       return value;
     };
 
-    Tour.prototype._showNextStep = function() {
+    Tour.prototype._showNextStep = function () {
       var promise, showNextStepHelper, step;
       step = this.getStep(this._current);
-      showNextStepHelper = (function(_this) {
-        return function(e) {
+      showNextStepHelper = (function (_this) {
+        return function (e) {
           return _this.showStep(step.next);
         };
       })(this);
@@ -1151,11 +1153,11 @@
       return this._callOnPromiseDone(promise, showNextStepHelper);
     };
 
-    Tour.prototype._showPrevStep = function() {
+    Tour.prototype._showPrevStep = function () {
       var promise, showPrevStepHelper, step;
       step = this.getStep(this._current);
-      showPrevStepHelper = (function(_this) {
-        return function(e) {
+      showPrevStepHelper = (function (_this) {
+        return function (e) {
           return _this.showStep(step.prev);
         };
       })(this);
@@ -1163,13 +1165,13 @@
       return this._callOnPromiseDone(promise, showPrevStepHelper);
     };
 
-    Tour.prototype._debug = function(text) {
+    Tour.prototype._debug = function (text) {
       if (this._options.debug) {
         return window.console.log("Bootstrap Tour '" + this._options.name + "' | " + text);
       }
     };
 
-    Tour.prototype._isRedirect = function(host, path, location) {
+    Tour.prototype._isRedirect = function (host, path, location) {
       var currentPath;
       if ((host != null) && host !== '' && (({}.toString.call(host) === '[object RegExp]' && !host.test(location.origin)) || ({}.toString.call(host) === '[object String]' && this._isHostDifferent(host, location)))) {
         return true;
@@ -1178,7 +1180,7 @@
       return (path != null) && path !== '' && (({}.toString.call(path) === '[object RegExp]' && !path.test(currentPath)) || ({}.toString.call(path) === '[object String]' && this._isPathDifferent(path, currentPath)));
     };
 
-    Tour.prototype._isHostDifferent = function(host, location) {
+    Tour.prototype._isHostDifferent = function (host, location) {
       switch ({}.toString.call(host)) {
         case '[object RegExp]':
           return !host.test(location.origin);
@@ -1189,11 +1191,11 @@
       }
     };
 
-    Tour.prototype._isPathDifferent = function(path, currentPath) {
+    Tour.prototype._isPathDifferent = function (path, currentPath) {
       return this._getPath(path) !== this._getPath(currentPath) || !this._equal(this._getQuery(path), this._getQuery(currentPath)) || !this._equal(this._getHash(path), this._getHash(currentPath));
     };
 
-    Tour.prototype._isJustPathHashDifferent = function(host, path, location) {
+    Tour.prototype._isJustPathHashDifferent = function (host, path, location) {
       var currentPath;
       if ((host != null) && host !== '') {
         if (this._isHostDifferent(host, location)) {
@@ -1207,7 +1209,7 @@
       return false;
     };
 
-    Tour.prototype._redirect = function(step, i, path) {
+    Tour.prototype._redirect = function (step, i, path) {
       var href;
       if ($.isFunction(step.redirect)) {
         return step.redirect.call(this, path);
@@ -1227,15 +1229,15 @@
       }
     };
 
-    Tour.prototype._isOrphan = function(step) {
+    Tour.prototype._isOrphan = function (step) {
       return (step.element == null) || !$(step.element).length || $(step.element).is(':hidden') && ($(step.element)[0].namespaceURI !== 'http://www.w3.org/2000/svg');
     };
 
-    Tour.prototype._isLast = function() {
+    Tour.prototype._isLast = function () {
       return this._current < this._options.steps.length - 1;
     };
 
-    Tour.prototype._showPopover = function(step, i) {
+    Tour.prototype._showPopover = function (step, i) {
       var $element, $tip, isOrphan, options, shouldAddSmart;
       $(".tour-" + this._options.name).remove();
       options = $.extend({}, this._options);
@@ -1251,8 +1253,8 @@
         $.extend(options, step.options);
       }
       if (step.reflex && !isOrphan) {
-        $(step.reflexElement).addClass('tour-step-element-reflex').off("" + (this._reflexEvent(step.reflex)) + ".tour-" + this._options.name).on("" + (this._reflexEvent(step.reflex)) + ".tour-" + this._options.name, (function(_this) {
-          return function() {
+        $(step.reflexElement).addClass('tour-step-element-reflex').off("" + (this._reflexEvent(step.reflex)) + ".tour-" + this._options.name).on("" + (this._reflexEvent(step.reflex)) + ".tour-" + this._options.name, (function (_this) {
+          return function () {
             if (_this._isLast()) {
               return _this.next();
             } else {
@@ -1282,7 +1284,7 @@
       }
     };
 
-    Tour.prototype._template = function(step, i) {
+    Tour.prototype._template = function (step, i) {
       var $navigation, $next, $prev, $resume, $template, template;
       template = step.template;
       if (this._isOrphan(step) && {}.toString.call(step.orphan) !== '[object Boolean]') {
@@ -1312,7 +1314,7 @@
       return $template.clone().wrap('<div>').parent().html();
     };
 
-    Tour.prototype._reflexEvent = function(reflex) {
+    Tour.prototype._reflexEvent = function (reflex) {
       if ({}.toString.call(reflex) === '[object Boolean]') {
         return 'click';
       } else {
@@ -1320,16 +1322,16 @@
       }
     };
 
-    Tour.prototype._focus = function($tip, $element, end) {
+    Tour.prototype._focus = function ($tip, $element, end) {
       var $next, role;
       role = end ? 'end' : 'next';
       $next = $tip.find("[data-role='" + role + "']");
-      return $element.on('shown.bs.popover', function() {
+      return $element.on('shown.bs.popover', function () {
         return $next.focus();
       });
     };
 
-    Tour.prototype._reposition = function($tip, step) {
+    Tour.prototype._reposition = function ($tip, step) {
       var offsetBottom, offsetHeight, offsetRight, offsetWidth, originalLeft, originalTop, tipOffset;
       offsetWidth = $tip[0].offsetWidth;
       offsetHeight = $tip[0].offsetHeight;
@@ -1362,15 +1364,15 @@
       }
     };
 
-    Tour.prototype._center = function($tip) {
+    Tour.prototype._center = function ($tip) {
       return $tip.css('top', $(window).outerHeight() / 2 - $tip.outerHeight() / 2);
     };
 
-    Tour.prototype._replaceArrow = function($tip, delta, dimension, position) {
+    Tour.prototype._replaceArrow = function ($tip, delta, dimension, position) {
       return $tip.find('.arrow').css(position, delta ? 50 * (1 - delta / dimension) + '%' : '');
     };
 
-    Tour.prototype._scrollIntoView = function(step, callback) {
+    Tour.prototype._scrollIntoView = function (step, callback) {
       var $element, $window, counter, height, offsetTop, scrollTop, windowHeight;
       $element = $(step.element);
       if (!$element.length) {
@@ -1396,8 +1398,8 @@
       counter = 0;
       return $('body, html').stop(true, true).animate({
         scrollTop: Math.ceil(scrollTop)
-      }, (function(_this) {
-        return function() {
+      }, (function (_this) {
+        return function () {
           if (++counter === 2) {
             callback();
             return _this._debug("Scroll into view.\nAnimation end element offset: " + ($element.offset().top) + ".\nWindow height: " + ($window.height()) + ".");
@@ -1406,34 +1408,34 @@
       })(this));
     };
 
-    Tour.prototype._onResize = function(callback, timeout) {
-      return $(window).on("resize.tour-" + this._options.name, function() {
+    Tour.prototype._onResize = function (callback, timeout) {
+      return $(window).on("resize.tour-" + this._options.name, function () {
         clearTimeout(timeout);
         return timeout = setTimeout(callback, 100);
       });
     };
 
-    Tour.prototype._initMouseNavigation = function() {
+    Tour.prototype._initMouseNavigation = function () {
       var _this;
       _this = this;
-      return $(document).off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='prev']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='next']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='end']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='pause-resume']").on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='next']", (function(_this) {
-        return function(e) {
+      return $(document).off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='prev']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='next']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='end']").off("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='pause-resume']").on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='next']", (function (_this) {
+        return function (e) {
           e.preventDefault();
           return _this.next();
         };
-      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='prev']", (function(_this) {
-        return function(e) {
+      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='prev']", (function (_this) {
+        return function (e) {
           e.preventDefault();
           if (_this._current > 0) {
             return _this.prev();
           }
         };
-      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='end']", (function(_this) {
-        return function(e) {
+      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='end']", (function (_this) {
+        return function (e) {
           e.preventDefault();
           return _this.end();
         };
-      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='pause-resume']", function(e) {
+      })(this)).on("click.tour-" + this._options.name, ".popover.tour-" + this._options.name + " *[data-role='pause-resume']", function (e) {
         var $this;
         e.preventDefault();
         $this = $(this);
@@ -1446,12 +1448,12 @@
       });
     };
 
-    Tour.prototype._initKeyboardNavigation = function() {
+    Tour.prototype._initKeyboardNavigation = function () {
       if (!this._options.keyboard) {
         return;
       }
-      return $(document).on("keyup.tour-" + this._options.name, (function(_this) {
-        return function(e) {
+      return $(document).on("keyup.tour-" + this._options.name, (function (_this) {
+        return function (e) {
           if (!e.which) {
             return;
           }
@@ -1474,7 +1476,7 @@
       })(this));
     };
 
-    Tour.prototype._makePromise = function(result) {
+    Tour.prototype._makePromise = function (result) {
       if (result && $.isFunction(result.then)) {
         return result;
       } else {
@@ -1482,10 +1484,10 @@
       }
     };
 
-    Tour.prototype._callOnPromiseDone = function(promise, cb, arg) {
+    Tour.prototype._callOnPromiseDone = function (promise, cb, arg) {
       if (promise) {
-        return promise.then((function(_this) {
-          return function(e) {
+        return promise.then((function (_this) {
+          return function (e) {
             return cb.call(_this, arg);
           };
         })(this));
@@ -1494,7 +1496,7 @@
       }
     };
 
-    Tour.prototype._showBackground = function(step, data) {
+    Tour.prototype._showBackground = function (step, data) {
       var $backdrop, height, pos, width, _base, _i, _len, _ref, _results;
       height = $(document).height();
       width = $(document).width();
@@ -1538,7 +1540,7 @@
       return _results;
     };
 
-    Tour.prototype._showOverlayElement = function(step) {
+    Tour.prototype._showOverlayElement = function (step) {
       var $backdropElement, elementData;
       $backdropElement = $(step.backdropElement);
       if ($backdropElement.length === 0) {
@@ -1564,7 +1566,7 @@
       return this._showBackground(step, elementData);
     };
 
-    Tour.prototype._hideOverlayElement = function(step) {
+    Tour.prototype._hideOverlayElement = function (step) {
       var $backdrop, pos, _ref;
       $(step.backdropElement).removeClass('tour-step-backdrop');
       _ref = this.backdrops;
@@ -1575,7 +1577,7 @@
       return this.backdrops = [];
     };
 
-    Tour.prototype._applyBackdropPadding = function(padding, data) {
+    Tour.prototype._applyBackdropPadding = function (padding, data) {
       if (typeof padding === 'object') {
         if (padding.top == null) {
           padding.top = 0;
@@ -1602,13 +1604,13 @@
       return data;
     };
 
-    Tour.prototype._clearTimer = function() {
+    Tour.prototype._clearTimer = function () {
       window.clearTimeout(this._timer);
       this._timer = null;
       return this._duration = null;
     };
 
-    Tour.prototype._getProtocol = function(url) {
+    Tour.prototype._getProtocol = function (url) {
       url = url.split('://');
       if (url.length > 1) {
         return url[0];
@@ -1617,25 +1619,25 @@
       }
     };
 
-    Tour.prototype._getHost = function(url) {
+    Tour.prototype._getHost = function (url) {
       url = url.split('//');
       url = url.length > 1 ? url[1] : url[0];
       return url.split('/')[0];
     };
 
-    Tour.prototype._getPath = function(path) {
+    Tour.prototype._getPath = function (path) {
       return path.replace(/\/?$/, '').split('?')[0].split('#')[0];
     };
 
-    Tour.prototype._getQuery = function(path) {
+    Tour.prototype._getQuery = function (path) {
       return this._getParams(path, '?');
     };
 
-    Tour.prototype._getHash = function(path) {
+    Tour.prototype._getHash = function (path) {
       return this._getParams(path, '#');
     };
 
-    Tour.prototype._getParams = function(path, start) {
+    Tour.prototype._getParams = function (path, start) {
       var param, params, paramsObject, _i, _len;
       params = path.split(start);
       if (params.length === 1) {
@@ -1651,7 +1653,7 @@
       return paramsObject;
     };
 
-    Tour.prototype._equal = function(obj1, obj2) {
+    Tour.prototype._equal = function (obj1, obj2) {
       var k, obj1Keys, obj2Keys, v, _i, _len;
       if ({}.toString.call(obj1) === '[object Object]' && {}.toString.call(obj2) === '[object Object]') {
         obj1Keys = Object.keys(obj1);
