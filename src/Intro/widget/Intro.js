@@ -134,7 +134,13 @@ define([
                     backdrop: s.backdrop,
                     backdropPadding: 5,
                     placement: s.position,
-                    reflex: s.clickToContinue
+                    reflex: s.clickToContinue,
+                    onShow: function (t) {
+                        var target = document.querySelector(self._getElementClassName(s));
+                        if (target && !self._elementIsOnScreen(target)) {
+                            target.scrollIntoView();
+                        }
+                    },
                 };
             });
         },
@@ -143,7 +149,6 @@ define([
             var self = this;
             var tour = new Tour({
                 steps: self._introSteps,
-                autoscroll: true,
                 onEnd: function () {
                     if (self.afterMf) {
                         var opts = {
@@ -186,6 +191,12 @@ define([
             if (cb && typeof cb === "function") {
                 cb();
             }
+        },
+
+        _elementIsOnScreen: function (elm) {
+            var rect = elm.getBoundingClientRect();
+            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
         }
     });
 });
