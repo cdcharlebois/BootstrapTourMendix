@@ -15,12 +15,12 @@ define([
     "dojo/html",
     "dojo/_base/event",
     "Intro/widget/lib/jquery",
-    "Intro/widget/lib/bootstrap-tour-standalone",
+    "Intro/widget/lib/bootstrap-tour-standalone-new",
     "dijit/_TemplatedMixin",
     "dojo/text!Intro/widget/template/Intro.html"
 
 
-], function(declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, jQuery, Tour, _TemplatedMixin, template) {
+], function (declare, _WidgetBase, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, lang, dojoText, dojoHtml, dojoEvent, jQuery, Tour, _TemplatedMixin, template) {
     "use strict";
     var $ = jQuery.noConflict(true);
 
@@ -43,15 +43,15 @@ define([
         buttonExtraClass: "",
         errorMessage: "",
 
-        constructor: function() {
+        constructor: function () {
             this._handles = [];
         },
 
-        postCreate: function() {
+        postCreate: function () {
             logger.debug(this.id + ".postCreate");
         },
 
-        update: function(obj, callback) {
+        update: function (obj, callback) {
             logger.debug(this.id + ".update");
 
             this._contextObj = obj;
@@ -63,10 +63,10 @@ define([
                         applyto: "selection",
                         guids: [this._contextObj.getGuid()]
                     },
-                    callback: function(res) {
+                    callback: function (res) {
                         if (res) self._waitForStepElements(self.steps, res);
                     },
-                    error: function(err) {
+                    error: function (err) {
                         // console.log(err)
                     }
                 });
@@ -77,29 +77,29 @@ define([
             this._updateRendering(callback);
         },
 
-        resize: function(box) {
+        resize: function (box) {
             logger.debug(this.id + ".resize");
         },
 
-        uninitialize: function() {
+        uninitialize: function () {
             logger.debug(this.id + ".uninitialize");
         },
 
-        _setupListeners: function() {
+        _setupListeners: function () {
             this.buttonNode.addEventListener('click', lang.hitch(this, this._doClick));
         },
 
-        _doClick: function() {
+        _doClick: function () {
             this._waitForStepElements(this.steps, true);
         },
 
-        _waitForStepElements: function(elements, force) {
+        _waitForStepElements: function (elements, force) {
             var self = this;
             var n = 0;
-            var wait = setInterval(function() {
+            var wait = setInterval(function () {
                 // console.log('waiting..' + n);
                 if (elements
-                    .filter(function(el) {
+                    .filter(function (el) {
                         return el.selector === "" || document.querySelector(self._getElementClassName(el));
                     })
                     .length == elements.length
@@ -114,23 +114,23 @@ define([
             }, 100);
         },
 
-        _getElementClassName: function(modelerStep) {
+        _getElementClassName: function (modelerStep) {
             // debugger;
             return modelerStep.selector ?
                 modelerStep.isMendixName ?
-                '.mx-name-' + modelerStep.selector :
-                modelerStep.selector :
+                    '.mx-name-' + modelerStep.selector :
+                    modelerStep.selector :
                 null; // default to an element so we don't get an infinite loop
         },
 
-        _setupTour: function() {
+        _setupTour: function () {
             var self = this;
-            this._introSteps = this.steps.map(function(s) {
+            this._introSteps = this.steps.map(function (s) {
                 return {
                     content: s.intro ? s.intro : '',
                     element: self._getElementClassName(s),
                     orphan: !self._getElementClassName(s),
-                    title: s.stepTitle? s.stepTitle : '',
+                    title: s.stepTitle ? s.stepTitle : '',
                     backdrop: s.backdrop,
                     backdropPadding: 5,
                     placement: s.position,
@@ -139,11 +139,12 @@ define([
             });
         },
 
-        _startTour: function(force) {
+        _startTour: function (force) {
             var self = this;
             var tour = new Tour({
                 steps: self._introSteps,
-                onEnd: function() {
+                autoscroll: true,
+                onEnd: function () {
                     if (self.afterMf) {
                         var opts = {
                             actionname: self.afterMf,
@@ -156,10 +157,10 @@ define([
                         }
                         mx.data.action({
                             params: opts,
-                            callback: function(res) {
+                            callback: function (res) {
                                 // self.afterMf;
                             },
-                            error: function(err) {
+                            error: function (err) {
                                 console.info("there was an error evaluating the callback" + err);
                             }
                         });
@@ -172,7 +173,7 @@ define([
 
         },
 
-        _updateRendering: function(callback) {
+        _updateRendering: function (callback) {
             logger.debug(this.id + "._updateRendering");
             this.buttonNode.innerHTML = this.buttonText;
             dojoClass.add(this.buttonNode, 'btn-' + this.buttonBootstrap);
@@ -181,7 +182,7 @@ define([
             this._executeCallback(callback);
         },
 
-        _executeCallback: function(cb) {
+        _executeCallback: function (cb) {
             if (cb && typeof cb === "function") {
                 cb();
             }
