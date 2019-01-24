@@ -38,6 +38,7 @@ define([
         steps: null,
         beforeMf: null,
         afterMf: null,
+        onStartMf: null,
         buttonText: "",
         buttonBootstrap: "",
         buttonExtraClass: "",
@@ -90,6 +91,9 @@ define([
         },
 
         _doClick: function () {
+            if (this.onStartMf) {
+                this._executeMicroflow(this.onStartMf);
+            }
             this._waitForStepElements(this.steps, true);
         },
 
@@ -151,24 +155,7 @@ define([
                 steps: self._introSteps,
                 onEnd: function () {
                     if (self.afterMf) {
-                        var opts = {
-                            actionname: self.afterMf,
-                        };
-                        if (self._contextObj) {
-                            opts.applyto = "selection";
-                            opts.guids = [self._contextObj.getGuid()];
-                        } else {
-                            opts.applyto = "none"; // handle a callback with no context
-                        }
-                        mx.data.action({
-                            params: opts,
-                            callback: function (res) {
-                                // self.afterMf;
-                            },
-                            error: function (err) {
-                                console.info("there was an error evaluating the callback" + err);
-                            }
-                        });
+                        self._executeMicroflow(self.afterMf);
                     }
                 }
             });
@@ -191,6 +178,27 @@ define([
             if (cb && typeof cb === "function") {
                 cb();
             }
+        },
+
+        _executeMicroflow: function (mf) {
+            var opts = {
+                actionname: mf,
+            };
+            if (this._contextObj) {
+                opts.applyto = "selection";
+                opts.guids = [this._contextObj.getGuid()];
+            } else {
+                opts.applyto = "none"; // handle a callback with no context
+            }
+            mx.data.action({
+                params: opts,
+                callback: function (res) {
+                    // self.afterMf;
+                },
+                error: function (err) {
+                    console.info("there was an error evaluating the callback" + err);
+                }
+            });
         },
 
         _elementIsOnScreen: function (elm) {
