@@ -204,7 +204,11 @@ define([
         _elementIsOnScreen: function (elm) {
             var rect = elm.getBoundingClientRect();
             var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+            // orig: bottom < 0        --> bottom of elm is above the viewport
+            //       top - height >= 0 --> top of elm is below the viewport
+            // return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+            // new: if the element is clipped at all
+            return !(rect.top < 0 || rect.bottom - viewHeight >= 0);
         }
     });
 });
