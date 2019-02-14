@@ -43,6 +43,9 @@ define([
         buttonBootstrap: "",
         buttonExtraClass: "",
         errorMessage: "",
+        wlkNextButtonText: null,
+        wlkPrevButtonText: null,
+        wlkEndButtonText: null,
 
         constructor: function () {
             this._handles = [];
@@ -150,9 +153,14 @@ define([
         },
 
         _startTour: function (force) {
+            var template = "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><div class='btn-group'><button class='btn btn-sm btn-default' data-role='prev' tabindex='-1'>« {{prev}}</button><button class='btn btn-sm btn-default' data-role='next'>{{next}} »</button></div><button class='btn btn-sm btn-default' data-role='end'>{{end}}</button></div></div>"
+                .split('{{next}}').join(this.wlkNextButtonText)
+                .split('{{prev}}').join(this.wlkPrevButtonText)
+                .split('{{end}}').join(this.wlkEndButtonText);
             var self = this;
             var tour = new Tour({
                 steps: self._introSteps,
+                template: template,
                 onEnd: function () {
                     if (self.afterMf) {
                         self._executeMicroflow(self.afterMf);
@@ -208,7 +216,8 @@ define([
             //       top - height >= 0 --> top of elm is below the viewport
             // return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
             // new: if the element is clipped at all
-            return !(rect.top < 0 || rect.bottom - viewHeight >= 0);
+            var topbar = document.querySelector('.region-topbar');
+            return !(rect.top < (topbar ? topbar.clientHeight : 0) || rect.bottom - viewHeight >= 0);
         }
     });
 });

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<widget id="Intro.widget.IntroNoContext" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
+<widget id="Intro.widget.IntroNoContext" needsEntityContext="false" 
+    xmlns="http://www.mendix.com/widget/1.0/">
     <name>Intro No Context</name>
     <description>The description of this widget.</description>
 
@@ -104,17 +105,41 @@
                         <enumerationValue key="left">Left</enumerationValue>
                     </enumerationValues>
                 </property>
-                 <property key="backdrop" type="boolean" required="true" defaultValue="true">
-                     <caption>Show Backdrop?</caption>
-                     <category>Main</category>
-                     <description>If enabled, the rest of the page will have a dark filter. Useful to highlighting main content areas.</description>
-                 </property>
-                  <property key="clickToContinue" type="boolean" required="true" defaultValue="false">
-                      <caption>Click to Continue</caption>
-                      <category>Main</category>
-                      <description>If enabled, clicking on `Element` will progress to walkthrough. Useful when highlighting buttons.</description>
-                  </property>
+                <property key="backdrop" type="boolean" required="true" defaultValue="true">
+                    <caption>Show Backdrop?</caption>
+                    <category>Main</category>
+                    <description>If enabled, the rest of the page will have a dark filter. Useful to highlighting main content areas.</description>
+                </property>
+                <property key="clickToContinue" type="boolean" required="true" defaultValue="false">
+                    <caption>Click to Continue</caption>
+                    <category>Main</category>
+                    <description>If enabled, clicking on `Element` will progress to walkthrough. Useful when highlighting buttons.</description>
+                </property>
             </properties>
+        </property>
+        <property key="wlkNextButtonText" type="translatableString" required="true">
+            <caption>Next Button Text</caption>
+            <category>Walkthrough Buttons</category>
+            <description></description>
+            <translations>
+                <translation lang="en_US">Next</translation>
+            </translations>
+        </property>
+        <property key="wlkPrevButtonText" type="translatableString" required="true">
+            <caption>Previous Button Text</caption>
+            <category>Walkthrough Buttons</category>
+            <description></description>
+            <translations>
+                <translation lang="en_US">Prev</translation>
+            </translations>
+        </property>
+        <property key="wlkEndButtonText" type="translatableString" required="true">
+            <caption>End Button Text</caption>
+            <category>Walkthrough Buttons</category>
+            <description></description>
+            <translations>
+                <translation lang="en_US">End tour</translation>
+            </translations>
         </property>
     </properties>
 </widget>
