@@ -87,6 +87,9 @@ define([
 
         uninitialize: function () {
             logger.debug(this.id + ".uninitialize");
+            if (this.displayHook) {
+                // dijit.registry.byNode(this._shadow).destroy();
+            }
         },
 
         _setupListeners: function () {
@@ -178,7 +181,14 @@ define([
             this.buttonNode.innerHTML = this.buttonText;
             dojoClass.add(this.buttonNode, 'btn-' + this.buttonBootstrap);
             dojoClass.add(this.buttonNode, this.buttonExtraClass);
-
+            if (this.displayHook) {
+                // this._shadow = this.domNode.cloneNode(true);
+                var shadowRoot = document.querySelector(this.displayHook);
+                while (shadowRoot.firstChild) {
+                    shadowRoot.removeChild(shadowRoot.firstChild);
+                }
+                shadowRoot.appendChild(this.buttonNode);
+            }
             this._executeCallback(callback);
         },
 

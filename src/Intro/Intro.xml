@@ -29,6 +29,11 @@
             <description>This Microflow will run when the user clicks to start the walkthrough.</description>
             <returnType type="Void"></returnType>
         </property>
+        <property key="displayHook" type="string" required="false">
+            <caption>Target</caption>
+            <category>Appearance</category>
+            <description>To render this widget elsewhere (i.e. in a menu bar), enter the CSS selector of the container to place this widget.</description>
+        </property>
         <property key="buttonText" type="translatableString" required="false" defaultValue="">
             <caption>Button Text</caption>
             <category>Appearance</category>
